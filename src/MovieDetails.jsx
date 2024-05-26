@@ -5,14 +5,14 @@ import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
-import NavBar from "./NavBar";
+import Navigation from "./Navigation";
+import { Col } from "react-bootstrap";
 
 function MovieDetails() {
 	const { id } = useParams();
 	const [movie, setMovie] = useState(null);
 
 	useEffect(() => {
-		alert(id);
 		const fetchMovieDetails = async () => {
 			try {
 				const res = await axiosInstance().get(`search/${id}`);
@@ -26,8 +26,8 @@ function MovieDetails() {
 	}, [id]);
 
 	return (
-		<div>
-			<NavBar />
+		<div style={{ width: "80%", marginLeft: "auto", marginRight: "auto" }}>
+			<Navigation />
 			<Container>
 				{movie ? (
 					<Card>
@@ -36,9 +36,16 @@ function MovieDetails() {
 								<Button variant="success">Back</Button>
 							</Link>
 						</Card.Header>
-						<Card.Body>
+						<Card.Body className="">
 							<Card.Title>{movie.title}</Card.Title>
-							<Card.Img variant="top" src={movie.poster} alt={movie.title} />
+							<Col md={4}>
+								<Card.Img
+									variant="top"
+									src={movie.poster}
+									alt={movie.title}
+									style={{ maxWidth: "100%", height: "auto" }}
+								/>
+							</Col>
 							<Card.Text>{movie.plot}</Card.Text>
 						</Card.Body>
 						<ListGroup className="list-group-flush">
