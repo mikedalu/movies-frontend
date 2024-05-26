@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import axiosInstance from "./axiosInstance";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";

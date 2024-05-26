@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Container from "react-bootstrap/Container";
 
 import axiosInstance from "./axiosInstance";
@@ -7,7 +7,6 @@ import Form from "react-bootstrap/Form";
 import { Link } from "react-router-dom";
 import Navigation from "./Navigation";
 import { ListGroup } from "react-bootstrap";
-import { Alert } from "bootstrap";
 
 function Movies() {
 	const [movie, setMovie] = useState([]);
@@ -34,7 +33,11 @@ function Movies() {
 				return updatedHistory;
 			});
 		} catch (err) {
-			console.log(err, "Error in log");
+			console.log(err.response.message, "====================");
+			if (err.response.status == 404) {
+				// console.log(err, "Error in log");
+				alert("No movie found");
+			}
 		}
 	};
 
