@@ -1,16 +1,29 @@
 import { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
-import axios from "axios";
+
+import axiosInstance from "./axiosInstance";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import { Link } from "react-router-dom";
+import NavBar from "./NavBar";
 
 function Movies() {
-	const [movies, setMovies] = useState([]);
+	const [movie, setMovie] = useState([]);
+	const [title, setTitle] = useState();
 
-	const fetchMovies = async () => {
-		const res = await axios.get("");
-		setMovies(res.data);
+	const fetchMovies = async (title) => {
+		if (!title) return;
+		try {
+			const res = await axiosInstance().get(`/search/${title}`);
+			console.log(res.data);
+			setMovie(res.data);
+		} catch (err) {
+			console.log(err, "Error in log");
+		}
+	};
+
+	const handleSumitSearch = async () => {
+		await fetchMovies(title);
 	};
 	useEffect(() => {
 		fetchMovies();
@@ -18,19 +31,41 @@ function Movies() {
 
 	return (
 		<div>
-			<Navbar expand="lg" className="bg-body-tertiary">
-				<Container>
-					<Navbar.Brand href="#home">Movie OMDB </Navbar.Brand>
-					<Navbar.Toggle aria-controls="basic-navbar-nav" />
-					<Navbar.Collapse id="basic-navbar-nav">
-						<Nav className="me-auto">
-							<Nav.Link href="#home">Home</Nav.Link>
-						</Nav>
-					</Navbar.Collapse>
-				</Container>
-			</Navbar>
+			<NavBar />
 			<Container>
 				<h1 className="">OMDB REACT - DOTNET INERVIEW PROJECT</h1>
+			</Container>
+			<Form>
+				<Form.Group className="mb-3" controlId="formBasicEmail">
+					<Form.Label>Enter a movie title to search</Form.Label>
+					<Form.Control type="text" placeholder="Search movie by title" onChange={(e) => setTitle(e.target.value)} />
+				</Form.Group>
+
+				<Button variant="primary" type="button" onClick={handleSumitSearch}>
+					Search
+				</Button>
+			</Form>
+
+			<Container>
+				<div>
+					<h3>Found movies</h3>
+					{movie && movie.title !== undefined ? (
+						<div>
+							<ul>
+								<li>Title: {movie.title}</li>
+								<li>Year: {movie.year}</li>
+								<li>Genre: {movie.genre}</li>
+								<li>Plot: {movie.plot}</li>
+							</ul>
+
+							<Link to={`/details/${movie?.title}`}>
+								<Button variant="success">View Details</Button>
+							</Link>
+						</div>
+					) : (
+						<h4>No movie please enter a movie name to search</h4>
+					)}
+				</div>
 			</Container>
 		</div>
 	);
